@@ -1,5 +1,4 @@
 import { Piece } from "./Piece";
-import { PiaceInitializeUtil } from "../module/PieceInitializeUtil";
 import { PieceChainUtil } from "../module/PieceChainUtil";
 
 export class PieceContainer {
@@ -8,51 +7,54 @@ export class PieceContainer {
     public static LENGTH_Y: number = 5;
     public static CAPACITY: number = PieceContainer.LENGTH_X * PieceContainer.LENGTH_Y;
 
-    private piaceArray: Piece[] = [];
+    private piaceArray: number[][] = [];
 
-    constructor() {
-        this.piaceArray = PiaceInitializeUtil.random();
+    constructor(piaceArray: number[][]) {
+        this.piaceArray = piaceArray;
     }
 
     public dispContainer(): void {
-        // TODO: 表示ごとにソートしているので実際のゲームだったら物凄く効率が悪い。。。
-        this.piaceArray.sort((a: Piece, b: Piece) => a.compareOfPoint(b));
-
         let result: string = "";
         this.piaceArray.forEach((p, i) => {
-            result += p.typeString;
-            if ((i + 1) % PieceContainer.LENGTH_X === 0) { result += "\n"; }
+            result += p.join(" ") + "\n";
         });
-
-        console.log("▼ランダム生成の結果は以下の通りになりました。");
         console.log(result);
+    }
 
-        console.log("▼3連続の部分を抽出します。");
+    public dispChainedPiecesArray(): void {
         this.getChainedPiecesArray().forEach((array, i) => {
             let result: string = `連鎖 ${i + 1}番目：`;
-            result += array.map((p) => ` (${p.pointX}, ${p.pointY})`);
+            result += array.map((p) => ` (${p.pointX + 1}, ${p.pointY + 1})`);
             console.log(result);
         });
     }
 
-    public getLineX(y: number): Piece[] {
-        return this.piaceArray.filter((p) => p.pointY === y);
+    public getPiecesOfLineX(y: number): Piece[] {
+        const pieces: Piece[] = [];
+        for (let x = 0; x < PieceContainer.LENGTH_X; x++) {
+            pieces.push(new Piece(x, y, this.piaceArray[y][x]));
+        }
+        return pieces;
     }
 
-    public getLineY(x: number): Piece[] {
-        return this.piaceArray.filter((p) => p.pointX === x);
+    public getPiecesOfLineY(x: number): Piece[] {
+        const pieces: Piece[] = [];
+        for (let y = 0; y < PieceContainer.LENGTH_Y; y++) {
+            pieces.push(new Piece(x, y, this.piaceArray[y][x]));
+        }
+        return pieces;
     }
 
-    public getChainedPiecesArray(): Piece[][] {
+    private getChainedPiecesArray(): Piece[][] {
         const chainResultArray: Piece[][] = [];
-        for (let x = 1; x <= PieceContainer.LENGTH_X; x++) {
-            const array: Piece[] = PieceChainUtil.getChainedPiecesOfLine(this.getLineY(x));
+        for (let x = 0; x < PieceContainer.LENGTH_X; x++) {
+            const array: Piece[] = PieceChainUtil.getChainedPiecesOfLine(this.getPiecesOfLineY(x));
             if (array.length > 0) {
                 chainResultArray.push(array);
             }
         }
-        for (let y = 1; y <= PieceContainer.LENGTH_Y; y++) {
-            const array: Piece[] = PieceChainUtil.getChainedPiecesOfLine(this.getLineX(y));
+        for (let y = 0; y < PieceContainer.LENGTH_Y; y++) {
+            const array: Piece[] = PieceChainUtil.getChainedPiecesOfLine(this.getPiecesOfLineX(y));
             if (array.length > 0) {
                 chainResultArray.push(array);
             }

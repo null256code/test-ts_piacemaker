@@ -2,7 +2,7 @@ import { Piece } from "../class/Piece";
 
 export module PieceChainUtil {
 
-    const CHAIN_NUM: number = 3;
+    const CHAIN_NUM: number = 3; //修正するときは PiaceInitializeUtil#nonChainRandom() も修正すること。
 
     function getChainedType(line: Piece[]): number[] {
 
