@@ -4,9 +4,9 @@ export module PieceChainUtil {
 
     const CHAIN_NUM: number = 3;
 
-    export function getChainedPieces(line: Piece[]): Piece[] {
+    function getChainedType(line: Piece[]): number[] {
 
-        const targetType: number[] = Piece.TYPE.filter((type) => {
+        const chainedType: number[] = Piece.TYPE.filter((type) => {
             let chainCount = 0;
             let maxChainCount = 0;
             line.forEach((p) => {
@@ -18,9 +18,16 @@ export module PieceChainUtil {
             });
             return maxChainCount >= CHAIN_NUM;
         });
+        return chainedType;
+    }
 
+    export function isChainLine(line: Piece[]): boolean {
+        return getChainedType(line).length > 0;
+    }
+
+    export function getChainedPiecesOfLine(line: Piece[]): Piece[] {
         return line.filter((p) => {
-            return targetType.some((t) => t === p.type);
+            return getChainedType(line).some((t) => t === p.type);
         });
     }
 }

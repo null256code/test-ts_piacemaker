@@ -11,7 +11,7 @@ export class PieceContainer {
     private piaceArray: Piece[] = [];
 
     constructor() {
-        PiaceInitializeUtil.random(this.piaceArray);
+        this.piaceArray = PiaceInitializeUtil.random();
     }
 
     public dispContainer(): void {
@@ -28,21 +28,7 @@ export class PieceContainer {
         console.log(result);
 
         console.log("▼3連続の部分を抽出します。");
-        const chainResultArray: Piece[][] = [];
-        for (let x = 1; x <= PieceContainer.LENGTH_X; x++) {
-            const array: Piece[] = PieceChainUtil.getChainedPieces(this.getLineY(x));
-            if (array.length > 0) {
-                chainResultArray.push(array);
-            }
-        }
-        for (let y = 1; y <= PieceContainer.LENGTH_Y; y++) {
-            const array: Piece[] = PieceChainUtil.getChainedPieces(this.getLineX(y));
-            if (array.length > 0) {
-                chainResultArray.push(array);
-            }
-
-        }
-        chainResultArray.forEach((array, i) => {
+        this.getChainedPiecesArray().forEach((array, i) => {
             let result: string = `連鎖 ${i + 1}番目：`;
             result += array.map((p) => ` (${p.pointX}, ${p.pointY})`);
             console.log(result);
@@ -55,5 +41,22 @@ export class PieceContainer {
 
     public getLineY(x: number): Piece[] {
         return this.piaceArray.filter((p) => p.pointX === x);
+    }
+
+    public getChainedPiecesArray(): Piece[][] {
+        const chainResultArray: Piece[][] = [];
+        for (let x = 1; x <= PieceContainer.LENGTH_X; x++) {
+            const array: Piece[] = PieceChainUtil.getChainedPiecesOfLine(this.getLineY(x));
+            if (array.length > 0) {
+                chainResultArray.push(array);
+            }
+        }
+        for (let y = 1; y <= PieceContainer.LENGTH_Y; y++) {
+            const array: Piece[] = PieceChainUtil.getChainedPiecesOfLine(this.getLineX(y));
+            if (array.length > 0) {
+                chainResultArray.push(array);
+            }
+        }
+        return chainResultArray;
     }
 }
