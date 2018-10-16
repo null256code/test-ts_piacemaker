@@ -5,15 +5,17 @@ import { PiaceInitializeUtil } from "./module/PieceInitializeUtil";
 console.log("main.tsを実行します。");
 console.log("表示されるパズルは左上の座標が(0,0)で、右がX方向、下がY方向になっています。");
 
+console.log("[1] 配列のランダム生成。連鎖したモノの表示。\n");
 q1_RandomInit_dispChainPieces();
 
 console.log("\n---------------------------\n");
 
-
+console.log("[2] 配列のランダム生成。(初回から連鎖はしないようにする)\n");
 q2_NonChainRandomInit();
 
 console.log("\n---------------------------\n");
 
+console.log("[3] 入れ替えることで連鎖する箇所を検知する。\n");
 q3_ExcheangePoint_VerticalOrHorizon();
 
 
@@ -42,7 +44,6 @@ function q3_ExcheangePoint_VerticalOrHorizon(): void {
     const piaceContainer = PiaceInitializeUtil.nonChainRandom();
     console.log("▼ランダム生成(ただし連鎖は避ける)の結果は以下の通りになりました。");
     dispPiaceContainer(piaceContainer);
-    console.log("\n");
 
     console.log("▼入れ替えて連鎖する場合の座標を抽出します。");
     dispAllXYPoint(piaceContainer.getChainablePiecesArray());
