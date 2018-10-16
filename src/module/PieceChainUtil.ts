@@ -4,30 +4,29 @@ export module PieceChainUtil {
 
     const CHAIN_NUM: number = 3; //修正するときは PiaceInitializeUtil#nonChainRandom() も修正すること。
 
-    function getChainedType(line: Piece[]): number[] {
+    export function getChainedPiecesArray(line: Piece[]): Piece[][] {
 
-        const chainedType: number[] = Piece.TYPE.filter((type) => {
+        const result: Piece[][] = [];
+        Piece.TYPE.forEach((type) => {
             let chainCount = 0;
             let maxChainCount = 0;
-            line.forEach((p) => {
+            let lastChainedPieceIndex: number = 0;
+            line.forEach((p, i) => {
                 // TODO: この方法だとline.lengthが7以上のときに２つ塊があるときに正しくチェックできない時がある。
                 chainCount = p.type === type ? chainCount + 1 : 0;
                 if (maxChainCount < chainCount) {
                     maxChainCount = chainCount;
+                    lastChainedPieceIndex = i;
                 }
             });
-            return maxChainCount >= CHAIN_NUM;
+            if (maxChainCount >= CHAIN_NUM) { 
+                result.push(line.slice(lastChainedPieceIndex-maxChainCount+1, lastChainedPieceIndex+1));
+            }
         });
-        return chainedType;
+        return result;
     }
 
     export function isChainLine(line: Piece[]): boolean {
-        return getChainedType(line).length > 0;
-    }
-
-    export function getChainedPiecesOfLine(line: Piece[]): Piece[] {
-        return line.filter((p) => {
-            return getChainedType(line).some((t) => t === p.type);
-        });
+        return getChainedPiecesArray(line).length > 0;
     }
 }

@@ -38,4 +38,14 @@ export module PiaceInitializeUtil {
         }
         return new PieceContainer(piaceArray);
     }
+
+    /** PieceContainer.pieceArrayがディープコピーされた状態のPieceContainerを作るために作成。
+     *  TODO: もしPieceContainerにpieceArray以外のプロパティが出来たら、このメソッドは修正する必要がある。 */
+    export function copyPieceContainer(pieceContainer: PieceContainer): PieceContainer { 
+        const copiedArray: number[][] = [];
+        pieceContainer.piaceArray.forEach((a) => {
+            copiedArray.push(a.concat());
+        })
+        return new PieceContainer(copiedArray);
+    }
 }
