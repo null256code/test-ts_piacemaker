@@ -3,6 +3,7 @@ import { PieceContainer } from "../class/PieceContainer";
 
 export module PiaceInitializeUtil {
 
+    /** 完全にランダムな内容でPieceContainerを生成する。生成後に連鎖していることもある。 */
     export function random(): PieceContainer {
         let piaceArray: number[][] = new Array(PieceContainer.LENGTH_Y);
         for (let y = 0; y < PieceContainer.LENGTH_Y; y++) {
@@ -15,6 +16,7 @@ export module PiaceInitializeUtil {
         return new PieceContainer(piaceArray);
     }
 
+    /** ランダムな内容でPieceContainerを生成するが、生成後にいきなり連鎖した状態にならないようにしている。 */
     export function nonChainRandom(): PieceContainer {
         let piaceArray: number[][] = new Array(PieceContainer.LENGTH_Y);
         for (let y = 0; y < PieceContainer.LENGTH_Y; y++) {

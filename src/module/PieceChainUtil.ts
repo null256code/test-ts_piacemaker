@@ -4,6 +4,8 @@ export module PieceChainUtil {
 
     const CHAIN_NUM: number = 3; //修正するときは PiaceInitializeUtil#nonChainRandom() も修正すること。
 
+    /** 引数の配列から連鎖しているピースを探し返す。
+     *  引数のPiece[]はチェックしたい１行のみを受け取ることを想定している。 */
     export function getChainedPiecesArray(line: Piece[]): Piece[][] {
 
         const result: Piece[][] = [];
